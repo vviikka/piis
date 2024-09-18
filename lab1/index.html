@@ -1,1 +1,51 @@
+<!doctype html>
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Database</title>
+    <script>
+        window.onload = function() {
+            const number = prompt('Какое количество фильмов вы смотрели?');
 
+            // Создаем объект 
+            const Films = {
+                count: number,
+                movies: {}
+            };
+
+            for (let i = 0; i < number; i++) {
+                let fn;
+                let fr;
+
+                // Проверка названия фильма
+                while (true) {
+                    fn = prompt('Как называется один из фильмов?');
+                    if (fn && fn.length <= 50) {
+                        break;
+                    } else {
+                        alert('Введите нормальное название фильма (не пустое и не более 50 символов).');
+                    }
+                }
+
+                // Проверка оценки фильма
+                while (true) {
+                    fr = prompt('Оцените этот фильм');
+                    if (fr && fr >= 1 && fr <= 10) {
+                        break;
+                    } else {
+                        alert('Введите нормальную оценку (от 1 до 10).');
+                    }
+                }
+
+                // Записываем в объект
+                Films.movies[fn] = fr;
+            }
+
+            // Вывод
+            console.log(Films);
+        };
+    </script>
+</head>
+<body>
+    <h1>Теперь откройте консоль (Ctrl+Shift+I)</h1>
+</body>
+</html>
