@@ -53,13 +53,13 @@
             if (colorKeys.length > 0) {
                 const imgContainer = document.createElement('div');
                 const firstColor = colorKeys[0];
-            console.log(shirt);
-console.log(shirt.colors[firstColor]);
-
+          
              try{
                 const imgFront = document.createElement('img');
                 imgFront.src = shirt.colors[firstColor].front;            
                 imgContainer.appendChild(imgFront);
+                imgFront.alt = `${shirt.name} - ${firstColor} Front`;
+                 
                 shirtDiv.appendChild(imgContainer);
                 } 
                 catch(error){
