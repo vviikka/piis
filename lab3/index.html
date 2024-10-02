@@ -38,16 +38,13 @@
         if (!displayedNames[shirt.name]) {
             displayedNames[shirt.name] = true; // Отметить как отображенное
 
-            
             const shirtDiv = document.createElement('div');
             shirtDiv.classList.add('shirt');
-
          
             const title = document.createElement('h3');
             title.textContent = shirt.name;
             shirtDiv.appendChild(title);
 
-           
             const price = document.createElement('p');
             price.textContent = shirt.price;
             shirtDiv.appendChild(price);
@@ -55,9 +52,9 @@
             const colorKeys = Object.keys(shirt.colors);
             if (colorKeys.length > 0) {
                 const imgContainer = document.createElement('div');
-
-                
                 const firstColor = colorKeys[0];
+            console.log(shirt);
+console.log(shirt.colors[firstColor]);
 
              try{
                 const imgFront = document.createElement('img');
