@@ -59,8 +59,6 @@
                 imgFront.src = shirt.colors[firstColor].front;            
                 imgContainer.appendChild(imgFront);
                 imgFront.alt = `${shirt.name} - ${firstColor} Front`;
-                 
-                shirtDiv.appendChild(imgContainer);
                 } 
                 catch(error){
                     console.error('ошибка', error);
@@ -68,6 +66,8 @@
                     imgFallback.src = shirt.default.front; 
                     imgContainer.appendChild(imgFallback);
                 }
+                
+                shirtDiv.appendChild(imgContainer);
             }
 
             // Кнопки 
