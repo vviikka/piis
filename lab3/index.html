@@ -41,13 +41,11 @@
             const shirtDiv = document.createElement('div');
             shirtDiv.classList.add('shirt');
          
+            
+
             const title = document.createElement('h3');
             title.textContent = shirt.name;
             shirtDiv.appendChild(title);
-
-            const price = document.createElement('p');
-            price.textContent = shirt.price;
-            shirtDiv.appendChild(price);
 
             const colorKeys = Object.keys(shirt.colors);
             if (colorKeys.length > 0) {
@@ -69,7 +67,9 @@
                 
                 shirtDiv.appendChild(imgContainer);
             }
-
+            const price = document.createElement('p');
+            price.textContent = shirt.price;
+            shirtDiv.appendChild(price);
             // Кнопки 
             const buttonContainer = document.createElement('div');
             buttonContainer.classList.add('button-container');
@@ -80,12 +80,11 @@
             const seePageButton = document.createElement('button');
             seePageButton.textContent = 'See Page';
      
-            shirtDiv.appendChild(buttonContainer);
-
-
+            
             buttonContainer.appendChild(quickViewButton);
             buttonContainer.appendChild(seePageButton);
-
+            shirtDiv.appendChild(buttonContainer);
+            
             shirtContainer.appendChild(shirtDiv);
         }
     });
