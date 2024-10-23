@@ -46,9 +46,9 @@ document.addEventListener('touchmove', (event) => {
 });
 
 document.addEventListener('touchend', () => {
-    if (pinnedSquare) {
+    
         pinnedSquare.style.backgroundColor = 'red';
-    }
+   
 });
 
 document.addEventListener('touchstart', (event) => {
