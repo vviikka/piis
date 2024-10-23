@@ -53,9 +53,10 @@ document.addEventListener('touchend', () => {
 
 document.addEventListener('touchstart', (event) => {
     if (event.touches.length > 1 && pinnedSquare) {
+        pinnedSquare.style.backgroundColor = 'red';
         returnToOriginalPosition(pinnedSquare);
         pinnedSquare = null; 
-        pinnedSquare.style.backgroundColor = 'red';
+        
     }
 });
 
