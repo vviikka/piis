@@ -14,6 +14,7 @@ let offsetX, offsetY;
 let initialPosition = { x: 0, y: 0 };
 
 const returnToOriginalPosition = (square) => {
+     pinnedSquare.style.backgroundColor = 'red';
     const original = originalPositions.find(pos => pos.element === square);
     if (original) {
         square.style.left = original.position.x + 'px';
@@ -54,7 +55,7 @@ document.addEventListener('touchstart', (event) => {
     if (event.touches.length > 1 && pinnedSquare) {
         returnToOriginalPosition(pinnedSquare);
         pinnedSquare = null; 
-        pinnedSquare.style.backgroundColor = 'red';
+       
     }
 });
 
