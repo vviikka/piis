@@ -7,4 +7,7 @@
 <br><a href="https://vviikka.github.io/piis/lab4/index.html">Ссылка на лабу 4</a>
 <br><a href="https://vviikka.github.io/piis/lab5/index.html">Ссылка на лабу 5</a>
 <br><a href="https://vviikka.github.io/piis/lab6/index.html">Ссылка на лабу 6</a>
+<br><a href="https://vviikka.github.io/piis/lab7/index.html">Ссылка на лабу 7</a>
+<br><a href="https://vviikka.github.io/piis/lab8/index.html">Ссылка на лабу 8</a>
+
 </div>
