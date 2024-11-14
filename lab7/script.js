@@ -1,3 +1,8 @@
+const svg = document.getElementById('drawing-area');
+const shapeSelect = document.querySelectorAll('input[name="shape"]');
+
+
+
 let circle; // Переменная для круга
 let isDrawing = false; // Флаг, указывающий на то, рисуем ли мы
 
