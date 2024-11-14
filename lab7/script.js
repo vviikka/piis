@@ -16,9 +16,15 @@ svg.addEventListener('mousedown', (event) => {
     circle.setAttribute('fill', 'rgba(255, 150, 0, 0.5)');
 
     svg.appendChild(circle); // Добавляем круг в SVG
+
+    // Обновляем круг при движении мыши
+    svg.addEventListener('mousemove', onMouseMove);
+
+    // Завершаем рисование при отпускании кнопки мыши
+    svg.addEventListener('mouseup', onMouseUp);
 });
 
-svg.addEventListener('mousemove', (event) => {
+function onMouseMove(event) {
     if (!isDrawing) return; // Если не рисуем, выходим из функции
 
     const centerX = circle.getAttribute('cx');
@@ -33,15 +39,15 @@ svg.addEventListener('mousemove', (event) => {
 
     // Обновляем только радиус круга
     circle.setAttribute('r', radius);
-});
+}
 
-svg.addEventListener('mouseup', () => {
+function onMouseUp() {
     isDrawing = false; // Сбрасываем флаг рисования
 
     // Удаляем обработчики, чтобы предотвратить дальнейшие изменения
     svg.removeEventListener('mousemove', onMouseMove);
     svg.removeEventListener('mouseup', onMouseUp);
-});
+}
 
 svg.addEventListener('mouseleave', () => {
     isDrawing = false; // Сбрасываем флаг при выходе мыши из SVG
