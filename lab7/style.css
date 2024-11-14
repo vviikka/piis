@@ -8,7 +8,7 @@ body {
     margin-bottom: 10px;
   }
   
-  canvas {
+  svg {
     border: 1px solid #000;
     cursor: crosshair;
   }
