@@ -6,16 +6,17 @@ svg.addEventListener('mousedown', (event) => {
 
     const centerX = event.offsetX;
     const centerY = event.offsetY;
-    const radius = 0; // Начальный радиус круга
 
-    // Создаем круг
-    circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    // Создаем круг, если его еще нет
+    if (!circle) {
+        circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('fill', 'rgba(255, 150, 0, 0.5)');
+        svg.appendChild(circle);
+    }
+
     circle.setAttribute('cx', centerX);
     circle.setAttribute('cy', centerY);
-    circle.setAttribute('r', radius);
-    circle.setAttribute('fill', 'rgba(255, 150, 0, 0.5)');
-
-    svg.appendChild(circle); // Добавляем круг в SVG
+    circle.setAttribute('r', 0); // Начальный радиус = 0
 
     // Обновляем круг при движении мыши
     svg.addEventListener('mousemove', onMouseMove);
@@ -27,14 +28,12 @@ svg.addEventListener('mousedown', (event) => {
 function onMouseMove(event) {
     if (!isDrawing) return; // Если не рисуем, выходим из функции
 
-    const centerX = circle.getAttribute('cx');
-    const centerY = circle.getAttribute('cy');
     const currentX = event.offsetX;
     const currentY = event.offsetY;
 
     const radius = Math.sqrt(
-        Math.pow(currentX - centerX, 2) +
-        Math.pow(currentY - centerY, 2)
+        Math.pow(currentX - circle.getAttribute('cx'), 2) +
+        Math.pow(currentY - circle.getAttribute('cy'), 2)
     );
 
     // Обновляем только радиус круга
