@@ -1,62 +1,95 @@
 const svg = document.getElementById('drawing-area');
-const shapeSelect = document.querySelectorAll('input[name="shape"]');
+        const shapeSelect = document.querySelectorAll('input[name="shape"]');
 
+        let isDrawing = false;
+        let startX, startY;
 
+        function getSelectedShape() {
+            for (const shape of shapeSelect) {
+                if (shape.checked) {
+                    return shape.value; 
+                }
+            }
+            return null; 
+        }
 
-let circle; // Переменная для круга
-let isDrawing = false; // Флаг, указывающий на то, рисуем ли мы
+        svg.addEventListener('mousedown', (event) => {
+            isDrawing = true;
+            startX = event.offsetX;
+            startY = event.offsetY;
+        });
 
-svg.addEventListener('mousedown', (event) => {
-    isDrawing = true; // Устанавливаем флаг рисования
+        svg.addEventListener('mousemove', (event) => {
+            if (!isDrawing) return;
 
-    const centerX = event.offsetX;
-    const centerY = event.offsetY;
+            const currentX = event.offsetX;
+            const currentY = event.offsetY;
+            const shape = getSelectedShape();
 
-    // Создаем круг, если его еще нет
-    if (!circle) {
-        circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('fill', 'rgba(255, 150, 0, 0.5)');
-        svg.appendChild(circle);
-    }
+            // Удаляем временные фигуры
+            const tempShapes = document.querySelectorAll('.temp-shape');
+            tempShapes.forEach(shape => shape.remove());
 
-    circle.setAttribute('cx', centerX);
-    circle.setAttribute('cy', centerY);
-    circle.setAttribute('r', 0); // Начальный радиус = 0
+            // Создаем временную фигуру
+            if (shape === 'circle') {
+                const radius = Math.sqrt(Math.pow(currentX - startX, 2) + Math.pow(currentY - startY, 2));
+                const tempCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                tempCircle.setAttribute("cx", startX);
+                tempCircle.setAttribute("cy", startY);
+                tempCircle.setAttribute("r", radius);
+                tempCircle.setAttribute("fill", "rgba(0, 150, 255, 0.5)");
+                tempCircle.setAttribute("class", "temp-shape");
+                svg.appendChild(tempCircle);
+            } else if (shape === 'rectangle') {
+                const width = currentX - startX;
+                const height = currentY - startY;
+                const rectX = width < 0 ? currentX : startX; // Если текущая позиция меньше стартовой
+                const rectY = height < 0 ? currentY : startY; 
 
-    // Обновляем круг при движении мыши
-    svg.addEventListener('mousemove', onMouseMove);
+                const tempRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                tempRect.setAttribute("x", rectX);
+                tempRect.setAttribute("y", rectY);
+                tempRect.setAttribute("width", Math.abs(width)); 
+                tempRect.setAttribute("height", Math.abs(height)); 
+                tempRect.setAttribute("fill", "rgba(255, 150, 0, 0.5)");
+                tempRect.setAttribute("class", "temp-shape");
+                svg.appendChild(tempRect);
+            }
+        });
 
-    // Завершаем рисование при отпускании кнопки мыши
-    svg.addEventListener('mouseup', onMouseUp);
-});
+        svg.addEventListener('mouseup', (event) => {
+            if (!isDrawing) return;
 
-function onMouseMove(event) {
-    if (!isDrawing) return; // Если не рисуем, выходим из функции
+            const currentX = event.offsetX;
+            const currentY = event.offsetY;
+            const shape = getSelectedShape();
 
-    const currentX = event.offsetX;
-    const currentY = event.offsetY;
+            // Добавляем окончательную фигуру
+            if (shape === 'circle') {
+                const radius = Math.sqrt(Math.pow(currentX - startX, 2) + Math.pow(currentY - startY, 2));
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", startX);
+                circle.setAttribute("cy", startY);
+                circle.setAttribute("r", radius);
+                circle.setAttribute("fill", "rgba(0, 150, 255, 0.5)");
+                svg.appendChild(circle);
+            } else if (shape === 'rectangle') {
+                const width = currentX - startX;
+                const height = currentY - startY;
+                const rectX = width < 0 ? currentX : startX; // Если текущая позиция меньше стартовой
+                const rectY = height < 0 ? currentY : startY;
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute("x", rectX);
+                rect.setAttribute("y", rectY);
+                rect.setAttribute("width", Math.abs(width));
+                rect.setAttribute("height", Math.abs(height)); 
+                rect.setAttribute("fill", "rgba(255, 150, 0, 0.5)");
+                svg.appendChild(rect);
+            }
 
-    const radius = Math.sqrt(
-        Math.pow(currentX - circle.getAttribute('cx'), 2) +
-        Math.pow(currentY - circle.getAttribute('cy'), 2)
-    );
+            isDrawing = false;
+        });
 
-    // Обновляем только радиус круга
-    circle.setAttribute('r', radius);
-}
-
-function onMouseUp() {
-    isDrawing = false; // Сбрасываем флаг рисования
-
-    // Удаляем обработчики, чтобы предотвратить дальнейшие изменения
-    svg.removeEventListener('mousemove', onMouseMove);
-    svg.removeEventListener('mouseup', onMouseUp);
-}
-
-svg.addEventListener('mouseleave', () => {
-    isDrawing = false; // Сбрасываем флаг при выходе мыши из SVG
-
-    // Удаляем обработчики, чтобы предотвратить дальнейшие изменения
-    svg.removeEventListener('mousemove', onMouseMove);
-    svg.removeEventListener('mouseup', onMouseUp);
-});
+        svg.addEventListener('mouseleave', () => {
+            isDrawing = false;
+        });
