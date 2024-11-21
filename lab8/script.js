@@ -1,52 +1,86 @@
-
 const canvas = document.getElementById('drawing-area');
-const ctx = canvas.getContext('2d');
-const shapeSelect = document.querySelectorAll('input[name="shape"]');
+        const ctx = canvas.getContext('2d');
+        const shapeSelect = document.querySelectorAll('input[name="shape"]');
 
-let isDrawing = false;
-let startX, startY;
+        let isDrawing = false;
+        let startX, startY;
+        let currentShape = null;
+        const shapes = [];  // Массив для хранения фигур
 
-function getSelectedShape() {
-    for (const shape of shapeSelect) {
-        if (shape.checked) {
-            return shape.value; 
+        function getSelectedShape() {
+            for (const shape of shapeSelect) {
+                if (shape.checked) {
+                    return shape.value; 
+                }
+            }
+            return null; 
         }
-    }
-    return null; 
-}
 
-canvas.addEventListener('mousedown', (event) => {
-    isDrawing = true;
-    startX = event.offsetX;
-    startY = event.offsetY;
-});
+        function drawShapes() {
+            // Очищаем канвас
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Рисуем все сохраненные фигуры
+            for (const shape of shapes) {
+                if (shape.type === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(shape.startX, shape.startY, shape.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 150, 255, 0.5)';
+                    ctx.fill();
+                    ctx.closePath();
+                } else if (shape.type === 'rectangle') {
+                    ctx.fillStyle = 'rgba(255, 150, 0, 0.5)';
+                    ctx.fillRect(shape.startX, shape.startY, shape.width, shape.height);
+                }
+            }
+        }
 
-canvas.addEventListener('mousemove', (event) => {
-    if (!isDrawing) return;
+        canvas.addEventListener('mousedown', (event) => {
+            isDrawing = true;
+            startX = event.offsetX;
+            startY = event.offsetY;
+            currentShape = { type: getSelectedShape(), startX, startY }; // Сохраняем текущую фигуру
+        });
 
-    const currentX = event.offsetX;
-    const currentY = event.offsetY;
-    const shape = getSelectedShape();
+        canvas.addEventListener('mousemove', (event) => {
+            if (!isDrawing) return;
 
-    if (shape === 'circle') {
-        const radius = Math.sqrt(Math.pow(currentX - startX, 2) + Math.pow(currentY - startY, 2));
-        ctx.beginPath();
-        ctx.arc(startX, startY, radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 150, 255, 0.5)';
-        ctx.fill();
-        ctx.closePath();
-    } else if (shape === 'rectangle') {
-        const width = currentX - startX;
-        const height = currentY - startY;
-        ctx.fillStyle = 'rgba(255, 150, 0, 0.5)';
-        ctx.fillRect(width < 0 ? currentX : startX, height < 0 ? currentY : startY, Math.abs(width), Math.abs(height));
-    } 
-});
+            const currentX = event.offsetX;
+            const currentY = event.offsetY;
 
-canvas.addEventListener('mouseup', () => {
-    isDrawing = false;
-});
+            // Обновляем параметры текущей фигуры
+            if (currentShape.type === 'circle') {
+                currentShape.radius = Math.sqrt(Math.pow(currentX - startX, 2) + Math.pow(currentY - startY, 2));
+            } else if (currentShape.type === 'rectangle') {
+                currentShape.width = currentX - startX;
+                currentShape.height = currentY - startY;
+            }
 
-canvas.addEventListener('mouseleave', () => {
-    isDrawing = false;
-});
+            // Перерисовываем все фигуры
+            drawShapes();
+
+            // Рисуем текущую фигуру
+            if (currentShape.type === 'circle') {
+                ctx.beginPath();
+                ctx.arc(startX, startY, currentShape.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 150, 255, 0.5)';
+                ctx.fill();
+                ctx.closePath();
+            } else if (currentShape.type === 'rectangle') {
+                ctx.fillStyle = 'rgba(255, 150, 0, 0.5)';
+                ctx.fillRect(startX, startY, currentShape.width, currentShape.height);
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            if (!isDrawing) return;
+
+            // Сохраняем текущую фигуру в массив
+            shapes.push(currentShape);
+
+            isDrawing = false;
+            currentShape = null;  // Сбрасываем текущую фигуру
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isDrawing = false;
+        });
